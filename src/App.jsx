@@ -1,32 +1,51 @@
 import { useState } from "react";
+import "react-datepicker/dist/react-datepicker.css";
+import { BudgetProvider, useBudget } from "./context/BudgetContext";
+import { ThemeProvider } from "./context/ThemeContext";
 import Navbar from "./components/Navbar";
 import Left from "./components/Left";
-import Right from "./components/Right";
+import Dashboard from "./pages/Dashboard";
+import Expenses from "./pages/Expenses";
+import Categories from "./pages/Categories";
+import Reports from "./pages/Reports";
+import Settings from "./pages/Settings";
 
-function App() {
-  const months = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
+const PAGES = {
+  dashboard: Dashboard,
+  expenses: Expenses,
+  categories: Categories,
+  reports: Reports,
+  settings: Settings,
+};
 
-  const [selectedMonth, setSelectedMonth] = useState(
-    months[new Date().getMonth()]
-  );
+function AppContent() {
+  const [activeView, setActiveView] = useState("dashboard");
+  const { selectedMonth } = useBudget();
+  const Page = PAGES[activeView] ?? Dashboard;
 
   return (
-    <div className="App">
-      <Navbar
-        months={months}
-        selectedMonth={selectedMonth}
-        onMonthChange={setSelectedMonth}
-      />
-
-      <div className="layout">
-        <Left />
-        <Right selectedMonth={selectedMonth} />
+    <div className="flex h-screen flex-col bg-gray-50 dark:bg-gray-900">
+      <Navbar />
+      <div className="flex flex-1 flex-col md:flex-row overflow-hidden">
+        <Left activeView={activeView} onNavigate={setActiveView} />
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 pb-24 md:pb-6">
+          {activeView === "settings" ? (
+            <Settings key={selectedMonth} />
+          ) : (
+            <Page />
+          )}
+        </main>
       </div>
     </div>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <BudgetProvider>
+      <ThemeProvider>
+        <AppContent />
+      </ThemeProvider>
+    </BudgetProvider>
+  );
+}
