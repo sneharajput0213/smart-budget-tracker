@@ -10,9 +10,9 @@ function Details({ expenses = [], onDelete, categories = [] }) {
       : expenses.filter((e) => e.category === selected);
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border-b border-gray-200">
-        <h2 className="text-base font-semibold text-gray-800">
+    <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border-b border-gray-200 dark:border-gray-700">
+        <h2 className="text-base font-semibold text-gray-800 dark:text-white">
           Recent Expenses
         </h2>
         <div className="flex items-center gap-2">
@@ -32,7 +32,7 @@ function Details({ expenses = [], onDelete, categories = [] }) {
           <select
             value={selected}
             onChange={(e) => setSelected(e.target.value)}
-            className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
+            className="rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-white px-3 py-2 text-sm focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
           >
             {filterOptions.map((c) => (
               <option key={c} value={c}>
@@ -46,7 +46,7 @@ function Details({ expenses = [], onDelete, categories = [] }) {
       <div className="overflow-x-auto">
         <table className="w-full min-w-[600px]">
           <thead>
-            <tr className="border-b border-gray-200 bg-gray-50/80 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+            <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-900/50 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
               <th className="px-4 py-3">Date</th>
               <th className="px-4 py-3">Category</th>
               <th className="px-4 py-3">Note</th>
@@ -57,7 +57,7 @@ function Details({ expenses = [], onDelete, categories = [] }) {
           <tbody>
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-4 py-12 text-center text-sm text-gray-500">
+                <td colSpan={5} className="px-4 py-12 text-center text-sm text-gray-500 dark:text-gray-400">
                   No expenses found
                 </td>
               </tr>
@@ -65,20 +65,20 @@ function Details({ expenses = [], onDelete, categories = [] }) {
               filtered.map((e) => (
                 <tr
                   key={e.id ?? `${e.date}-${e.amount}`}
-                  className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors"
+                  className="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50/50 dark:hover:bg-gray-700/50 transition-colors"
                 >
-                  <td className="px-4 py-3 font-medium text-gray-900">
+                  <td className="px-4 py-3 font-medium text-gray-900 dark:text-white">
                     {e.date}
                   </td>
                   <td className="px-4 py-3">
-                    <span className="inline-flex rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800">
+                    <span className="inline-flex rounded-full bg-gray-100 dark:bg-gray-700 px-3 py-1 text-xs font-medium text-gray-800 dark:text-gray-200">
                       {e.category}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-gray-700">
+                  <td className="px-4 py-3 text-gray-700 dark:text-gray-300">
                     {e.note || "—"}
                   </td>
-                  <td className="px-4 py-3 font-medium text-gray-900">
+                  <td className="px-4 py-3 font-medium text-gray-900 dark:text-white">
                     ₹{Number(e.amount).toFixed(2)}
                   </td>
                   <td className="px-4 py-3">
@@ -87,7 +87,7 @@ function Details({ expenses = [], onDelete, categories = [] }) {
                       onClick={() =>
                         onDelete(e.id ?? `${e.date}-${e.amount}`)
                       }
-                      className="rounded p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-600 transition-colors"
+                      className="rounded p-1.5 text-gray-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 transition-colors"
                       aria-label="Delete expense"
                     >
                       <svg

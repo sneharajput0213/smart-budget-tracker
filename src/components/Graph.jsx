@@ -31,10 +31,10 @@ function Graph({ expenses = [] }) {
   if (data.length === 0) {
     return (
       <div>
-        <h2 className="text-base font-semibold text-gray-800 mb-4">
+        <h2 className="text-base font-semibold text-gray-800 dark:text-white mb-4">
           Category-wise Breakdown
         </h2>
-        <p className="text-sm text-gray-500 py-8 text-center">
+        <p className="text-sm text-gray-500 dark:text-gray-400 py-8 text-center">
           No data to display
         </p>
       </div>
@@ -43,7 +43,7 @@ function Graph({ expenses = [] }) {
 
   return (
     <div>
-      <h2 className="text-base font-semibold text-gray-800 mb-4">
+      <h2 className="text-base font-semibold text-gray-800 dark:text-white mb-4">
         Category-wise Breakdown
       </h2>
       <div className="flex flex-wrap items-center justify-center gap-6">
@@ -74,8 +74,8 @@ function Graph({ expenses = [] }) {
                 className="inline-block w-3 h-3 rounded-full shrink-0"
                 style={{ background: item.color }}
               />
-              <span className="text-gray-700">{item.name}</span>
-              <span className="font-medium text-gray-900">
+              <span className="text-gray-700 dark:text-gray-300">{item.name}</span>
+              <span className="font-medium text-gray-900 dark:text-white">
                 ₹{item.value.toFixed(2)}
               </span>
             </div>

@@ -43,8 +43,8 @@ export default function Dashboard() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
-          <p className="text-sm text-gray-500 mt-0.5">
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Dashboard</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
             Track your expenses and manage your budget for {selectedMonth}
           </p>
         </div>
@@ -52,9 +52,9 @@ export default function Dashboard() {
 
       {/* Smart Alerts */}
       {isOverBudget && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-3">
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 flex items-start gap-3">
           <svg
-            className="w-5 h-5 text-red-600 shrink-0 mt-0.5"
+            className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -67,8 +67,8 @@ export default function Dashboard() {
             />
           </svg>
           <div className="flex-1">
-            <p className="text-sm font-semibold text-red-800">Over Budget</p>
-            <p className="text-sm text-red-700 mt-0.5">
+            <p className="text-sm font-semibold text-red-800 dark:text-red-300">Over Budget</p>
+            <p className="text-sm text-red-700 dark:text-red-200 mt-0.5">
               You have exceeded your budget by ₹{Math.abs(remaining).toFixed(2)}. Consider reviewing your expenses.
             </p>
           </div>
@@ -76,9 +76,9 @@ export default function Dashboard() {
       )}
 
       {isNearLimit && !isOverBudget && (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
+        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4 flex items-start gap-3">
           <svg
-            className="w-5 h-5 text-amber-600 shrink-0 mt-0.5"
+            className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -91,8 +91,8 @@ export default function Dashboard() {
             />
           </svg>
           <div className="flex-1">
-            <p className="text-sm font-semibold text-amber-800">Near Budget Limit</p>
-            <p className="text-sm text-amber-700 mt-0.5">
+            <p className="text-sm font-semibold text-amber-800 dark:text-amber-300">Near Budget Limit</p>
+            <p className="text-sm text-amber-700 dark:text-amber-200 mt-0.5">
               You've used {percentUsed.toFixed(1)}% of your budget. Only ₹{remaining.toFixed(2)} remaining.
             </p>
           </div>
@@ -100,9 +100,9 @@ export default function Dashboard() {
       )}
 
       {isUnderBudget && !isNearLimit && !isOverBudget && (
-        <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-start gap-3">
+        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4 flex items-start gap-3">
           <svg
-            className="w-5 h-5 text-green-600 shrink-0 mt-0.5"
+            className="w-5 h-5 text-green-600 dark:text-green-400 shrink-0 mt-0.5"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -115,8 +115,8 @@ export default function Dashboard() {
             />
           </svg>
           <div className="flex-1">
-            <p className="text-sm font-semibold text-green-800">Under Budget</p>
-            <p className="text-sm text-green-700 mt-0.5">
+            <p className="text-sm font-semibold text-green-800 dark:text-green-300">Under Budget</p>
+            <p className="text-sm text-green-700 dark:text-green-200 mt-0.5">
               Great! You've used only {percentUsed.toFixed(1)}% of your budget. ₹{remaining.toFixed(2)} remaining.
             </p>
           </div>
@@ -126,50 +126,7 @@ export default function Dashboard() {
       <Budget total={budgetForSelectedMonth} spent={spent} />
       <Cards expenses={expensesForSelectedMonth} />
 
-      {/* Recent 5 Expenses */}
-      {recentExpenses.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">
-            Recent Expenses
-          </h2>
-          <div className="space-y-3">
-            {recentExpenses.map((expense) => {
-              const categoryColors = {
-                Food: "bg-emerald-100 text-emerald-700",
-                Travel: "bg-blue-100 text-blue-700",
-                Shopping: "bg-purple-100 text-purple-700",
-                Bills: "bg-amber-100 text-amber-700",
-                Others: "bg-gray-100 text-gray-700",
-              };
-              return (
-                <div
-                  key={expense.id ?? `${expense.date}-${expense.amount}`}
-                  className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0"
-                >
-                  <div className="flex items-center gap-3">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        categoryColors[expense.category] ?? categoryColors.Others
-                      }`}
-                    >
-                      {expense.category}
-                    </span>
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">
-                        {expense.note || "No note"}
-                      </p>
-                      <p className="text-xs text-gray-500">{expense.date}</p>
-                    </div>
-                  </div>
-                  <p className="text-sm font-semibold text-gray-900">
-                    ₹{Number(expense.amount).toFixed(2)}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
+
 
       <Graph expenses={expensesForSelectedMonth} />
       <Details

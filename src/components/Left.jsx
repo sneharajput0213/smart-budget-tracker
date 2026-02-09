@@ -37,18 +37,17 @@ const icons = {
 
 export default function Left({ activeView = "dashboard", onNavigate }) {
   return (
-    <aside className="w-56 shrink-0 border-r border-gray-200 bg-white py-4">
+    <aside className="w-56 shrink-0 border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 py-4">
       <nav className="px-3 space-y-1">
         {items.map((item) => (
           <button
             key={item.id}
             type="button"
             onClick={() => onNavigate(item.id)}
-            className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors ${
-              activeView === item.id
-                ? "bg-brand-light text-brand"
-                : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-            }`}
+            className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors ${activeView === item.id
+                ? "bg-brand-light dark:bg-brand-dark/20 text-brand"
+                : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white"
+              }`}
           >
             {icons[item.icon]}
             {item.label}

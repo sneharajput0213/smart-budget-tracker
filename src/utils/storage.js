@@ -55,31 +55,7 @@ export const MONTHS = [
   "July", "August", "September", "October", "November", "December",
 ];
 
-/** Get 1-based month index (1–12) from month name. */
-export function getMonthIndex(monthName) {
-  const i = MONTHS.indexOf(monthName);
-  return i >= 0 ? i + 1 : new Date().getMonth() + 1;
-}
 
-/** Days in month for given month name and year (handles leap year for February). */
-export function getDaysInMonth(monthName, year) {
-  const monthIndex = getMonthIndex(monthName);
-  const y = Number(year);
-  if (Number.isNaN(y) || y < 1) return 31;
-  const last = new Date(y, monthIndex, 0);
-  return last.getDate();
-}
-
-/** Build YYYY-MM-DD from selected day, month name, and year. */
-export function buildDateString(day, monthName, year) {
-  const m = getMonthIndex(monthName);
-  const d = Number(day);
-  const y = Number(year);
-  if (Number.isNaN(d) || Number.isNaN(y) || d < 1) return "";
-  const maxDay = getDaysInMonth(monthName, year);
-  const safeDay = Math.min(Math.max(1, d), maxDay);
-  return `${y}-${String(m).padStart(2, "0")}-${String(safeDay).padStart(2, "0")}`;
-}
 
 export function loadYearFromStorage() {
   try {

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useBudget } from "../context/BudgetContext";
+import { useTheme } from "../context/ThemeContext";
 
 export default function Settings() {
   const {
@@ -13,6 +14,7 @@ export default function Settings() {
     resetAll,
     expensesForSelectedMonth,
   } = useBudget();
+  const { theme, setTheme } = useTheme();
   const [localBudget, setLocalBudget] = useState(String(budgetForSelectedMonth));
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
@@ -54,28 +56,52 @@ export default function Settings() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold text-gray-900">Settings</h1>
-        <p className="text-sm text-gray-500 mt-0.5">
+        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Settings</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
           Manage your monthly budget and preferences
         </p>
       </div>
 
+      {/* Theme Settings */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm max-w-md">
+        <h2 className="text-lg font-medium text-gray-800 dark:text-white mb-2">
+          Appearance
+        </h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+          Choose your preferred theme.
+        </p>
+        <div className="flex bg-gray-100 dark:bg-gray-700 p-1 rounded-lg">
+          {["light", "dark", "system"].map((t) => (
+            <button
+              key={t}
+              onClick={() => setTheme(t)}
+              className={`flex-1 py-1.5 text-sm font-medium rounded-md capitalize transition-all ${theme === t
+                ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm"
+                : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                }`}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Year (used for expense dates) */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm max-w-md">
-        <h2 className="text-lg font-medium text-gray-800 mb-2">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm max-w-md">
+        <h2 className="text-lg font-medium text-gray-800 dark:text-white mb-2">
           Year
         </h2>
-        <p className="text-sm text-gray-500 mb-4">
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
           The year used for all expense dates. Month is selected from the navbar; only the day is chosen when adding an expense.
         </p>
-        <label htmlFor="year-select" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="year-select" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
           Year
         </label>
         <select
           id="year-select"
           value={selectedYear}
           onChange={(e) => setSelectedYear(Number(e.target.value))}
-          className="block w-full max-w-[140px] rounded-lg border border-gray-300 px-3 py-2 text-gray-900 shadow-sm focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
+          className="block w-full max-w-[140px] rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 text-gray-900 shadow-sm focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
         >
           {Array.from({ length: 31 }, (_, i) => new Date().getFullYear() - 15 + i).map((y) => (
             <option key={y} value={y}>
@@ -86,11 +112,11 @@ export default function Settings() {
       </div>
 
       {/* Monthly Budget */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm max-w-md">
-        <h2 className="text-lg font-medium text-gray-800 mb-2">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm max-w-md">
+        <h2 className="text-lg font-medium text-gray-800 dark:text-white mb-2">
           Monthly Budget
         </h2>
-        <p className="text-sm text-gray-500 mb-4">
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
           Set your budget limit for <strong>{selectedMonth}</strong>. You can set
           a different budget for each month from the month selector in the
           navbar.
@@ -98,7 +124,7 @@ export default function Settings() {
         <div className="space-y-2">
           <label
             htmlFor="budget-amount"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
           >
             Budget amount (₹)
           </label>
@@ -112,10 +138,10 @@ export default function Settings() {
               setLocalBudget(e.target.value);
               setError("");
             }}
-            className="block w-full max-w-[200px] rounded-lg border border-gray-300 px-3 py-2 text-gray-900 shadow-sm focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
+            className="block w-full max-w-[200px] rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 text-gray-900 shadow-sm focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
           />
           {error && (
-            <p className="text-sm text-red-600" role="alert">
+            <p className="text-sm text-red-600 dark:text-red-400" role="alert">
               {error}
             </p>
           )}
@@ -130,11 +156,11 @@ export default function Settings() {
       </div>
 
       {/* Clear Current Month Expenses */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm max-w-md">
-        <h2 className="text-lg font-medium text-gray-800 mb-2">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm max-w-md">
+        <h2 className="text-lg font-medium text-gray-800 dark:text-white mb-2">
           Clear Current Month Expenses
         </h2>
-        <p className="text-sm text-gray-500 mb-4">
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
           Remove all expenses for <strong>{selectedMonth}</strong>. This action
           cannot be undone. Currently, you have {expenseCount} expense
           {expenseCount !== 1 ? "s" : ""} for this month.
@@ -144,13 +170,13 @@ export default function Settings() {
             type="button"
             onClick={() => setShowClearConfirm(true)}
             disabled={expenseCount === 0}
-            className="inline-flex items-center justify-center rounded-lg border border-red-300 bg-white px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center justify-center rounded-lg border border-red-300 dark:border-red-800 bg-white dark:bg-transparent px-4 py-2 text-sm font-medium text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Clear {selectedMonth} Expenses
           </button>
         ) : (
           <div className="space-y-2">
-            <p className="text-sm text-red-600 font-medium">
+            <p className="text-sm text-red-600 dark:text-red-400 font-medium">
               Are you sure? This will delete all {expenseCount} expense
               {expenseCount !== 1 ? "s" : ""} for {selectedMonth}.
             </p>
@@ -165,7 +191,7 @@ export default function Settings() {
               <button
                 type="button"
                 onClick={() => setShowClearConfirm(false)}
-                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                className="rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-2 text-sm font-medium text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
               >
                 Cancel
               </button>
@@ -175,11 +201,11 @@ export default function Settings() {
       </div>
 
       {/* Reset All Data */}
-      <div className="bg-white rounded-xl border border-red-200 p-6 shadow-sm max-w-md">
-        <h2 className="text-lg font-medium text-red-800 mb-2">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-red-200 dark:border-red-800 p-6 shadow-sm max-w-md">
+        <h2 className="text-lg font-medium text-red-800 dark:text-red-400 mb-2">
           Reset All Data
         </h2>
-        <p className="text-sm text-gray-600 mb-4">
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
           This will permanently delete all your data including budgets, expenses,
           categories, and category limits across all months. This action cannot be
           undone.
@@ -188,13 +214,13 @@ export default function Settings() {
           <button
             type="button"
             onClick={() => setShowResetConfirm(true)}
-            className="inline-flex items-center justify-center rounded-lg border border-red-300 bg-white px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 transition-colors"
+            className="inline-flex items-center justify-center rounded-lg border border-red-300 dark:border-red-800 bg-white dark:bg-transparent px-4 py-2 text-sm font-medium text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
           >
             Reset All Data
           </button>
         ) : (
           <div className="space-y-2">
-            <p className="text-sm text-red-600 font-medium">
+            <p className="text-sm text-red-600 dark:text-red-400 font-medium">
               ⚠️ Warning: This will delete everything. Are you absolutely sure?
             </p>
             <div className="flex gap-2">
@@ -208,7 +234,7 @@ export default function Settings() {
               <button
                 type="button"
                 onClick={() => setShowResetConfirm(false)}
-                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                className="rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-2 text-sm font-medium text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
               >
                 Cancel
               </button>

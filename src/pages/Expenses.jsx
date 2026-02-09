@@ -11,11 +11,17 @@ export default function Expenses() {
     addExpense,
     deleteExpense,
     categories,
+    months,
   } = useBudget();
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleAdd = (expense) => {
-    addExpense(selectedMonth, expense);
+    // Derive month safely from YYYY-MM-DD string
+    const [year, month, day] = expense.date.split("-");
+    const monthIndex = parseInt(month, 10) - 1;
+    const monthName = months[monthIndex];
+
+    addExpense(monthName || selectedMonth, expense);
     setModalOpen(false);
   };
 
@@ -27,8 +33,8 @@ export default function Expenses() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Expenses</h1>
-          <p className="text-sm text-gray-500 mt-0.5">
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Expenses</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
             Add and manage expenses for {selectedMonth}
           </p>
         </div>

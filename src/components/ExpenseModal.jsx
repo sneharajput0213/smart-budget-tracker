@@ -1,38 +1,27 @@
-import { useState, useMemo } from "react";
-import { getDaysInMonth, buildDateString } from "../utils/storage";
+import { useState } from "react";
+import DatePicker from "react-datepicker";
+import { format } from "date-fns";
 
 export default function ExpenseModal({ onClose, onAdd, categories, selectedMonth, selectedYear }) {
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState(categories?.[0] ?? "Food");
-  const [selectedDay, setSelectedDay] = useState("");
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [note, setNote] = useState("");
-
-  const isReady = Boolean(selectedMonth && selectedYear);
-  const daysInMonth = useMemo(
-    () => (isReady ? getDaysInMonth(selectedMonth, selectedYear) : 0),
-    [isReady, selectedMonth, selectedYear]
-  );
-  const dayOptions = useMemo(
-    () => (daysInMonth > 0 ? Array.from({ length: daysInMonth }, (_, i) => i + 1) : []),
-    [daysInMonth]
-  );
-  const dateString = useMemo(
-    () => (selectedDay && isReady ? buildDateString(Number(selectedDay), selectedMonth, selectedYear) : ""),
-    [selectedDay, isReady, selectedMonth, selectedYear]
-  );
 
   const handleSubmit = () => {
     const numAmount = Number(amount);
-    if (!amount || Number.isNaN(numAmount) || numAmount <= 0 || !dateString) return;
+    if (!amount || Number.isNaN(numAmount) || numAmount <= 0 || !selectedDate) return;
+
     onAdd({
       amount: numAmount,
       category,
-      date: dateString,
+      date: format(selectedDate, "yyyy-MM-dd"),
       note: (note || "").trim(),
     });
+
     setAmount("");
     setCategory(categories?.[0] ?? "Food");
-    setSelectedDay("");
+    setSelectedDate(new Date());
     setNote("");
   };
 
@@ -43,15 +32,15 @@ export default function ExpenseModal({ onClose, onAdd, categories, selectedMonth
       role="presentation"
     >
       <div
-        className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl"
+        className="w-full max-w-md rounded-xl bg-white dark:bg-gray-800 p-6 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">Add New Expense</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Add New Expense</h3>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+            className="rounded-lg p-1 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-600 dark:hover:text-gray-300"
             aria-label="Close"
           >
             ✕
@@ -59,7 +48,7 @@ export default function ExpenseModal({ onClose, onAdd, categories, selectedMonth
         </div>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Amount (₹)
             </label>
             <input
@@ -69,17 +58,17 @@ export default function ExpenseModal({ onClose, onAdd, categories, selectedMonth
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="0.00"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Category
             </label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-2 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
             >
               {(categories || []).map((c) => (
                 <option key={c} value={c}>
@@ -89,29 +78,28 @@ export default function ExpenseModal({ onClose, onAdd, categories, selectedMonth
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Select Date
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Date
             </label>
-            <p className="text-xs text-gray-500 mb-2">
-              Month and Year are auto-selected from settings.
+            <div className="relative">
+              <DatePicker
+                selected={selectedDate}
+                onChange={(date) => setSelectedDate(date)}
+                dateFormat="d MMM yyyy"
+                maxDate={new Date()}
+                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-2 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
+                placeholderText="Select date"
+                showMonthDropdown
+                showYearDropdown
+                dropdownMode="select"
+              />
+            </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              Expenses are added based on the selected date.
             </p>
-            <select
-              value={selectedDay}
-              onChange={(e) => setSelectedDay(e.target.value)}
-              disabled={!isReady}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand disabled:bg-gray-100 disabled:cursor-not-allowed"
-              aria-label="Select day of month"
-            >
-              <option value="">Select day</option>
-              {dayOptions.map((d) => (
-                <option key={d} value={d}>
-                  {d}
-                </option>
-              ))}
-            </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Note (optional)
             </label>
             <input
@@ -119,7 +107,7 @@ export default function ExpenseModal({ onClose, onAdd, categories, selectedMonth
               value={note}
               onChange={(e) => setNote(e.target.value)}
               placeholder="Add a note..."
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-2 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
             />
           </div>
         </div>
@@ -127,14 +115,14 @@ export default function ExpenseModal({ onClose, onAdd, categories, selectedMonth
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={handleSubmit}
-            disabled={!dateString}
+            disabled={!selectedDate}
             className="rounded-lg bg-brand px-4 py-2 text-sm font-medium text-white hover:bg-brand-dark disabled:opacity-50 disabled:cursor-not-allowed"
           >
             + Add Expense
