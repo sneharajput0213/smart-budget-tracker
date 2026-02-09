@@ -17,7 +17,7 @@ export default function Expenses() {
 
   const handleAdd = (expense) => {
     // Derive month safely from YYYY-MM-DD string
-    const [year, month, day] = expense.date.split("-");
+    const [, month] = expense.date.split("-");
     const monthIndex = parseInt(month, 10) - 1;
     const monthName = months[monthIndex];
 

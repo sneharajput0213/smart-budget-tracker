@@ -2,7 +2,7 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import { format } from "date-fns";
 
-export default function ExpenseModal({ onClose, onAdd, categories, selectedMonth, selectedYear }) {
+export default function ExpenseModal({ onClose, onAdd, categories }) {
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState(categories?.[0] ?? "Food");
   const [selectedDate, setSelectedDate] = useState(new Date());

@@ -21,6 +21,8 @@ Smart Budget is a production-ready, month-wise expense and budget tracking web a
 
 ## How to Run Locally
 
+- **Prerequisites**: Node.js 18+ and npm
+
 1. **Install Dependencies**:
    ```bash
    npm install
@@ -31,4 +33,36 @@ Smart Budget is a production-ready, month-wise expense and budget tracking web a
    npm run dev
    ```
 
-The application will be available at `http://localhost:5173`.
+3. **Build for Production**:
+   ```bash
+   npm run build
+   ```
+
+4. **Preview Production Build**:
+   ```bash
+   npm run preview
+   ```
+
+5. **Lint the Project**:
+   ```bash
+   npm run lint
+   ```
+
+The development server runs at `http://localhost:5173`. Production-ready build artifacts are output to the `dist/` folder.
+
+**Commit & Push Changes**
+
+Set your local git identity and push to the configured remote:
+
+```bash
+# set author info (local repo)
+git config user.name "ashishjha1304"
+git config user.email "ashishjha1304@outlook.com"
+
+# commit and push
+git add .
+git commit -m "chore: production readiness fixes (lint, build)" || true
+git push origin HEAD
+```
+
+Note: ensure you have push access to the repository or correct remote configured.

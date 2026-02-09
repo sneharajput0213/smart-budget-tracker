@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from "react";
 
 const ThemeContext = createContext(null);
@@ -28,12 +29,12 @@ export function ThemeProvider({ children }) {
                 isDark = theme === "dark";
             }
 
+            // Only toggle the `dark` class. Do not add a `light` class – Tailwind
+            // uses the presence of `dark` on the root element.
             if (isDark) {
                 root.classList.add("dark");
-                root.classList.remove("light");
             } else {
                 root.classList.remove("dark");
-                root.classList.add("light");
             }
         }
 

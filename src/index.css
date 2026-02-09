@@ -140,9 +140,11 @@
   color: rgb(75 85 99);
 }
 
-/* Force dark mode for select dropdowns */
+/* Ensure selects use the light color-scheme by default so explicit
+   light theme ignores the user's system preference. In dark mode,
+   force dark color-scheme and option colors. */
 select {
-  color-scheme: light dark;
+  color-scheme: light;
 }
 
 .dark select {
